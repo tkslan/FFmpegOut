@@ -16,7 +16,8 @@ namespace FFmpegOut
         SerializedProperty _startTime;
         SerializedProperty _recordLength;
 
-        static GUIContent [] _presetLabels = {
+        static GUIContent[] _presetLabels = {
+            new GUIContent("H.264 Ultra (MP4)"),
             new GUIContent("H.264 Default (MP4)"),
             new GUIContent("H.264 Lossless 420 (MP4)"),
             new GUIContent("H.264 Lossless 444 (MP4)"),
@@ -25,7 +26,7 @@ namespace FFmpegOut
             new GUIContent("VP8 (WebM)")
         };
 
-        static int [] _presetOptions = { 0, 1, 2, 3, 4, 5 };
+        static int[] _presetOptions = { 0, 1, 2, 3, 4, 5, 6 };
 
         void OnEnable()
         {

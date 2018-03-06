@@ -9,7 +9,9 @@ namespace FFmpegOut
     {
         #region Public properties
 
-        public enum Preset {
+        public enum Preset
+        {
+            H264Ultra,
             H264Default,
             H264Lossless420,
             H264Lossless444,
@@ -83,7 +85,8 @@ namespace FFmpegOut
         Process _subprocess;
         BinaryWriter _stdin;
 
-        static string [] _suffixes = {
+        static string[] _suffixes = {
+            ".mp4",
             ".mp4",
             ".mp4",
             ".mp4",
@@ -92,7 +95,8 @@ namespace FFmpegOut
             ".webm"
         };
 
-        static string [] _options = {
+        static string[] _options = {
+            "-pix_fmt rgb24 -c:v libx264rgb -vf scale=w=1920:h=1080 -crf 23 -preset ultrafast -qp 0 -crf 23",
             "-pix_fmt yuv420p",
             "-pix_fmt yuv420p -preset ultrafast -crf 0",
             "-pix_fmt yuv444p -preset ultrafast -crf 0",
