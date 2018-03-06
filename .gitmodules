@@ -1,3 +1,6 @@
 [submodule "PostProcessing"]
 	path = PostProcessing
 	url = https://github.com/Unity-Technologies/PostProcessing.git
+[submodule "Assets/PostProcessing"]
+	path = Assets/PostProcessing
+	url = https://github.com/Unity-Technologies/PostProcessing.git
