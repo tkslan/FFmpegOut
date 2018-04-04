@@ -10,6 +10,8 @@ namespace FFmpegOut
         SerializedProperty _setResolution;
         SerializedProperty _width;
         SerializedProperty _height;
+        SerializedProperty _useCustomTexture;
+        SerializedProperty _renderTexture;
         SerializedProperty _frameRate;
         SerializedProperty _allowSlowDown;
         SerializedProperty _preset;
@@ -38,6 +40,8 @@ namespace FFmpegOut
             _preset = serializedObject.FindProperty("_preset");
             _startTime = serializedObject.FindProperty("_startTime");
             _recordLength = serializedObject.FindProperty("_recordLength");
+            _useCustomTexture = serializedObject.FindProperty("_useCustomTexture");
+            _renderTexture = serializedObject.FindProperty("_renderTexture");
         }
 
         public override void OnInspectorGUI()
@@ -55,9 +59,18 @@ namespace FFmpegOut
                 EditorGUI.indentLevel--;
             }
 
+            EditorGUILayout.PropertyField(_useCustomTexture);
+
+            if (_useCustomTexture.boolValue)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_renderTexture);
+                EditorGUI.indentLevel--;
+            }
             EditorGUILayout.PropertyField(_frameRate);
             EditorGUILayout.PropertyField(_allowSlowDown);
             EditorGUILayout.IntPopup(_preset, _presetLabels, _presetOptions);
+
             EditorGUILayout.PropertyField(_startTime);
             EditorGUILayout.PropertyField(_recordLength);
 

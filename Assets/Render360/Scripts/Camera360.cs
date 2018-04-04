@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-public class Camera360 : MonoBehaviour {
-
+public class Camera360 : MonoBehaviour
+{
     public RenderTexture leftEye;
     public RenderTexture rightEye;
     public RenderTexture equirect;
@@ -13,6 +13,9 @@ public class Camera360 : MonoBehaviour {
     void LateUpdate()
     {
         Camera cam = GetComponent<Camera>();
+
+        if (equirect == null)
+            return;
 
         if (cam == null)
         {
@@ -40,8 +43,9 @@ public class Camera360 : MonoBehaviour {
 
         rightEye.ConvertToEquirect(equirect, Camera.MonoOrStereoscopicEye.Right);
 
-        if (equirect == null)
-            return;
+        RenderTexture.ReleaseTemporary(rightEye);
+        RenderTexture.ReleaseTemporary(leftEye);
+
     }
 }
 

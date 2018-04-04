@@ -11,6 +11,8 @@ namespace FFmpegOut
         [SerializeField] bool _setResolution = true;
         [SerializeField] int _width = 1280;
         [SerializeField] int _height = 720;
+        [SerializeField] bool _useCustomTexture = false;
+        [SerializeField] RenderTexture _renderTexture;
         [SerializeField] int _frameRate = 30;
         [SerializeField] bool _allowSlowDown = true;
         [SerializeField] FFmpegPipe.Preset _preset;
@@ -86,20 +88,30 @@ namespace FFmpegOut
 
         void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
-            if (_pipe != null)
-            {
-                var tempRT = RenderTexture.GetTemporary(source.width, source.height);
-                Graphics.Blit(source, tempRT, _material, 0);
+            if (_pipe == null)
+                return;
 
-                var tempTex = new Texture2D(source.width, source.height, TextureFormat.RGBA32, false);
+            if (_useCustomTexture)
+                source = _renderTexture;
+
+            var tempRT = RenderTexture.GetTemporary(source.width, source.height);
+
+            Graphics.Blit(source, tempRT, _material, 0);
+
+            var tempTex = new Texture2D(source.width, source.height, TextureFormat.RGBA32, false);
+            
+            if (_useCustomTexture)
+                Graphics.CopyTexture(tempRT, tempTex);
+            else
                 tempTex.ReadPixels(new Rect(0, 0, source.width, source.height), 0, 0, false);
-                tempTex.Apply();
+           
+            tempTex.Apply();
 
-                _pipe.Write(tempTex.GetRawTextureData());
+            _pipe.Write(tempTex.GetRawTextureData());
 
-                Destroy(tempTex);
-                RenderTexture.ReleaseTemporary(tempRT);
-            }
+            Destroy(tempTex);
+
+            RenderTexture.ReleaseTemporary(tempRT);
 
             Graphics.Blit(source, destination);
         }
@@ -129,6 +141,11 @@ namespace FFmpegOut
                 height = camera.pixelHeight;
             }
 
+            if (_useCustomTexture)
+            {
+                width = _renderTexture.width;
+                height = _renderTexture.height;
+            }
             // Open an output stream.
             _pipe = new FFmpegPipe(name, width, height, _frameRate, _preset);
             _activePipeCount++;
